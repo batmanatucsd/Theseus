@@ -1,0 +1,30 @@
+
+If you guys have any questions on working with git on the terminal, 
+let me know; i might be able to help)
+
+If you haven't set ssh key for your github account, you might have to do that.
+Follow instructions here:
+https://help.github.com/articles/generating-ssh-keys
+
+CLONING GITHUB REPO
+On terminal you would run this command:
+
+$ git clone https://github.com/batmanatucsd/Theseus.git  
+
+##NOTE: don't forget the .git at the end of the url
+
+
+WORKING WITH GIT ON TERMINAL:
+To push your files:
+ - copy/make your file to your repo directory
+ - you have to add your files:
+ 	ex. $ git add [file you want to add]
+	ex. $ git add .    // this will add all the files in current directory
+ - then commit it:
+ 	ex. $ git commit -m "comment"
+ - then push to update github repo on online:
+ 	ex. $ git push
+
+To get files from the github repo:
+ - you need to pull:
+ 	ex. $ git pull
