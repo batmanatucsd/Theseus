@@ -11,6 +11,20 @@
 #include <limits.h>
 #define V 9
 
+using namespace std;
+
+/*takes in an empty graph and
+void makeMaze( int size, int graph[][size] )
+{
+  int maze [size][size];
+  for( int i = 0; i < size; i++ )
+  {
+    for( int j = 0; j < size; j++ )
+    {
+      graph[i][j] = rand() % 16;
+    }
+  }
+}*/
 
 // A function to find the vertex with minimum distance value, from
 // the set of vertices not yet included in shortest path tree
@@ -78,8 +92,31 @@ void dijkstra(int graph[V][V], int src)
 }
 int main(int argc, const char * argv[])
 {
+    int size = 5;
+    cout << "Enter a Maze Size: ";
+    cin >> size;
+    int graph[size][size];
+
+    for( int i = 0; i < size; i++ )
+    {
+      for( int j = 0; j < size; j++ )
+      {
+        graph[i][j] = rand() % 16;
+      }
+    }
+
+    for( int i = 0; i < size; i++ )
+    {
+      for( int j = 0; j < size; j++ )
+      {
+        cout << graph[i][j] << " ";
+      }
+      cout << endl;
+    }
+
     
-    int graph[V][V] = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
+    //makeMaze( size, graph );
+    /* int graph[V][V] = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
                        {4, 0, 8, 0, 0, 0, 0, 11, 0},
                        {0, 8, 0, 7, 0, 4, 0, 0, 2},
                        {0, 0, 7, 0, 9, 14, 0, 0, 0},
@@ -87,12 +124,11 @@ int main(int argc, const char * argv[])
                        {0, 0, 4, 0, 10, 0, 2, 0, 0},
                        {0, 0, 0, 14, 0, 2, 0, 1, 6},
                        {8, 11, 0, 0, 0, 0, 1, 0, 7},
-                       {0, 0, 2, 0, 0, 0, 6, 7, 0}
-    };
+                       {0, 0, 2, 0, 0, 0, 6, 7, 0}*/
     
-   dijkstra(graph, 0);
+    
+   //dijkstra(graph, 0);
     // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+   return 0;
 }
 
