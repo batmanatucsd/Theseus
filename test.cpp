@@ -1,11 +1,11 @@
 
 #include <iostream>
-#include "Node.hpp"
+#include "Board.hpp"
 
-#define rows 3 
-#define cols 3
+using namespace std;
 
 int main() {
+  /*
   Node node;
   Node node2;
 
@@ -34,5 +34,16 @@ int main() {
     std::cout << maze[2][1].getEast() << std::endl;
     std::cout << maze[2][1].getNorth() << std::endl;
 
+    */
+  
+  Board board;
+
+  board.setHValues();
+  
+  for(int i=0; i<16*16; ++i) {
+    cout << " h = " << board.maze->at(i).getH() << "  ";
+    if(i%16 == 15) 
+      cout << endl;
+  }
   return 0;
 }
