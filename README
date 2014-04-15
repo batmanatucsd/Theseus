@@ -1,4 +1,3 @@
-
 If you guys have any questions on working with git on the terminal, 
 let me know; i might be able to help)
 
@@ -28,3 +27,10 @@ To push your files:
 To get files from the github repo:
  - you need to pull:
  	ex. $ git pull
+
+
+Flood-Fill Algorithm
+http://www.scribd.com/doc/21972475/8/Modified-Flood-Fill-Algorithm
+
+Videos that might help us:
+https://www.youtube.com/watch?v=85M1-JogifM&list=UUUpjRUqnidm15wYb0Kr6-dg
