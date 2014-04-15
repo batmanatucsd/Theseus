@@ -34,3 +34,20 @@ http://www.scribd.com/doc/21972475/8/Modified-Flood-Fill-Algorithm
 
 Videos that might help us:
 https://www.youtube.com/watch?v=85M1-JogifM&list=UUUpjRUqnidm15wYb0Kr6-dg
+
+A* Algorithm
+http://www.policyalmanac.org/games/aStarTutorial.htm
+http://www.policyalmanac.org/games/heuristics.htm
+https://www.youtube.com/watch?v=eTx6HQ9Veas
+
+Dijkstra
+http://codereview.stackexchange.com/questions/41254/dijkstras-and-prims-algorithms-correctness-efficiency
+https://www.youtube.com/watch?v=gdmfOwyQlcI
+
+Maze solver
+http://robotics.stackexchange.com/questions/1060/self-learning-maze-solving-robot-using-8bit-microcontroller
+http://www.benaxelrod.com/robots/maze/index.html
+
+SLAM
+http://www.mrpt.org/tutorials/slam-algorithms/slam-simultaneous-localization-and-mapping-for-beginners-the-basics/
+
