@@ -38,12 +38,15 @@ int main() {
     std::cout << maze[2][1].getNorth() << std::endl;
 
   */
+
+  // Initial Setup
   std::vector<Node> newMaze(256);  
   setMaze(newMaze); // set up Maze
   setHValues(); // set H values on maze
   
-  findShortestPath(); // find the shortest path when the maze is known
 
+  /************************ DEBUG *****************************/
+  /************** Printing out H values ***********************/
   for(int i=0; i<rows*cols; ++i) {
     cout << " h = " << maze[i].getH() << "  ";
     if(maze[i].getH()/10 == 0)
@@ -52,13 +55,45 @@ int main() {
       cout << endl;
   }
 
+  /************************ DEBUG *****************************/
+  /*************** Setting Up the Walls ***********************/
+
+  setNorth(12);
+  setEast(1);
+  setNorth(7);
+  setNorth(8);
+  setNorth(9);
+  setWest(9);
+  setSouth(10);
+  setEast(10);
+  setWest(17);
+  setEast(13);
+  setEast(19);
+  setNorth(20);
+  setNorth(21);
+  setEast(21);
+  setNorth(25);
+  setNorth(26);
+  setEast(26);
+  setEast(28);
+
+
+
+  /************************ DEBUG *****************************/
+  /*************** Getting Shortest Path **********************/
+
+  findShortestPath(); // find the shortest path when the maze is known
+
   std::stack<byte> shortestPath;
-  Node currentNode = maze[rows*(rows/2)+cols/2];
+  byte final = rows*(rows/2)+cols/2;
+  Node currentNode = maze[final];
   byte parent = currentNode.getParent();
 
 
   std::cout << "the final node: " << rows*(rows/2)+cols/2 << std::endl;
   std::cout << "parent of the final node: " << (int) parent << std::endl;
+
+  shortestPath.push(final);
   // get shortest path by following parent node
   while(parent != 0) {
     std::cout << "i'm here | finding shortest path" << std::endl;

@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <set>
 #include <queue>
 #include "Node.hpp"
 
@@ -14,7 +13,6 @@
 #define EAST 1
 #define WEST 2
 #define SOUTH 3
-
 
 /************************************************/
 /*************** Global Variables ***************/ 
@@ -35,6 +33,7 @@ void findShortestPath();
 class CompareNodes {
   public:
   bool operator() (const byte  & lhs, const byte & rhs) const {
+    // lowest f value gets the highest priority
     return maze[lhs].getF() > maze[rhs].getF(); 
   }
 };
@@ -72,6 +71,9 @@ class priority_queue : public std::priority_queue<T, Container, Compare> {
 // Constructor
 void setMaze(std::vector<Node> & newMaze) {
   maze = newMaze; 
+
+  maze[0].setEast(); // set east wall of starting cell
+  maze[0+neighbors[EAST]].setWest();
 
   // set walls around the boarders
   for(byte r=0; r<rows; ++r) {
@@ -114,10 +116,26 @@ void setGValues(byte currentRow, byte currentCol) {
        
 }
 
+void setNorth(byte cell) {
+  maze[cell].setNorth(); maze[cell+neighbors[NORTH]].setSouth();
+}
+
+void setEast(byte cell) {
+  maze[cell].setEast(); maze[cell+neighbors[EAST]].setWest();
+}
+
+void setWest(byte cell) {
+  maze[cell].setWest(); maze[cell+neighbors[WEST]].setEast();
+}
+
+void setSouth(byte cell) {
+  maze[cell].setSouth(); maze[cell+neighbors[SOUTH]].setNorth();
+}
+
+
 void findShortestPath() {
   //std::priority_queue <byte, std::vector<byte>, CompareNodes> queue; // open list
   priority_queue<byte, std::vector<byte>, CompareNodes> queue; // open list
-  std::set<byte> visited; // closed list
 
   queue.push(0);
   maze[0].setG(0); // set g value of the start
@@ -138,11 +156,10 @@ void findShortestPath() {
     //if(current == rows*rows/2+cols/2) {
       // found the destination, end search 
     //}
-   
     queue.pop(); // remove current node from the queue
-    visited.insert(current); // add current node to closed list
 
     currentNode = &maze[current];
+    currentNode->visit(); // add current node to closed list
 
     ///////// DEBUG MESSAGE ///////////////
     std::cout << "i'm here and CURRENT: " << (int) current << std::endl;
@@ -154,28 +171,22 @@ void findShortestPath() {
         case NORTH:
           if(currentNode->getNorth())
             continue; // if there is a wall, skip adjacent to NORTH
-          neighbor = current + neighbors[next]; // else get neighbor 
           break;
-
         case EAST:
           if(currentNode->getEast())
             continue; // if there is a wall, skip adjacent to EAST 
-          neighbor = current + neighbors[next]; // else get neighbor 
           break;
-          
         case WEST:
           if(currentNode->getWest())
             continue; // if there is a wall, skip adjacent to WEST
-          neighbor = current + neighbors[next]; // else get neighbor 
           break;
         case SOUTH:
           if(currentNode->getSouth())
             continue; // if there is a wall, skip adjacent to WEST
-          neighbor = current + neighbors[next]; // else get neighbor 
           break;
-
       }
 
+      neighbor = current + neighbors[next]; // else get neighbor 
       neighborNode = &maze[neighbor]; // get neighbor node
 
       // if the finish node is found
@@ -192,7 +203,7 @@ void findShortestPath() {
 
       // if the neigbor is in closed list
       // don't do anything, and continue
-      if(visited.find(neighbor) != visited.end())
+      if(neighborNode->isVisited())
         continue;
 
       // evaluate new g value
@@ -204,14 +215,14 @@ void findShortestPath() {
       bool isInOpen = queue.find(neighbor) != queue.end() ? true : false;
       
     ///////// DEBUG MESSAGE ///////////////
-    std::cout << "             neighbor: " << (int) neighbor << std::endl;
+    std::cout << "             neighbor: " << (int) neighbor; 
 
       // if the neighbor is in open OR 
       // the new g value is smaller than the old g value
       if(!isInOpen || newG < currentNode->getG()) {
 
     ///////// DEBUG MESSAGE ///////////////
-    std::cout << "i'm in updating the neighbor" << std::endl;
+    std::cout << "  updating the neighbor"; 
 
         neighborNode->setParent(current); // set parent
         neighborNode->setG(newG); // set new g value
@@ -222,6 +233,7 @@ void findShortestPath() {
           queue.push(neighbor); 
         }
       }
+      std::cout << std::endl;
     } // loop for all the neighbor
     
   } // end a* algorithm
