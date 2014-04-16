@@ -13,6 +13,7 @@
 #define NORTH 0
 #define EAST 1
 #define WEST 2
+#define SOUTH 3
 
 
 /************************************************/
@@ -21,7 +22,7 @@
 std::vector<Node> maze;
 // adjustments for adjacent nodes
 // 0-3: NESW, 4-7: diagnols
-char neighbors[3] = {cols, 1, -1}; // Front, Right, Left
+char neighbors[4] = {cols, 1, -1, -cols}; // Front, Right, Left
 
 /************************************************/
 /************ Function Declarations *************/ 
@@ -147,7 +148,7 @@ void findShortestPath() {
     std::cout << "i'm here and CURRENT: " << (int) current << std::endl;
 
     // loop through all its neighbor
-    for(byte next=0; next<3; ++next) {
+    for(byte next=0; next<4; ++next) {
       // getting a valid neigbor
       switch(next) {
         case NORTH:
@@ -167,6 +168,12 @@ void findShortestPath() {
             continue; // if there is a wall, skip adjacent to WEST
           neighbor = current + neighbors[next]; // else get neighbor 
           break;
+        case SOUTH:
+          if(currentNode->getSouth())
+            continue; // if there is a wall, skip adjacent to WEST
+          neighbor = current + neighbors[next]; // else get neighbor 
+          break;
+
       }
 
       neighborNode = &maze[neighbor]; // get neighbor node
