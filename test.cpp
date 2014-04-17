@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char * argv[]) {
   
  /*
   Node node;
@@ -124,10 +124,10 @@ int main() {
     for(int c=0; c<cols; ++c) {
        currentNode = maze[cols*r+c];
        if(currentNode.getNorth()) {
-           std::cout << " --- " ; 
+           std::cout << " ----- " ; 
        } else {
        
-           std::cout << "     ";
+           std::cout << "       ";
        }
     }
     
@@ -135,6 +135,7 @@ int main() {
 
     for(int c=0; c<cols; ++c) {
        currentNode = maze[cols*r+c];
+
        if(currentNode.getWest()) {
          std::cout << "|"; 
        } else {
@@ -142,13 +143,22 @@ int main() {
          std::cout << " ";
        }
        
-       std::cout << cols*r+c;
-       if((cols*r+c)/10 == 0) {
-           std::cout << "  "; 
+       if(argc != 1) {
+           std::cout << " ";
+           std::cout << cols*r+c;
+           if((cols*r+c)/10 == 0) {
+               std::cout << "   "; 
+           } else {
+                if((cols*r+c)/100 == 0 ) 
+                    std::cout << "  "; 
+                else {
+                    std::cout << " "; 
+                }
+           }
        } else {
-          std::cout << " "; 
+           std::cout << "     ";
        }
-       //std::cout << "   ";
+       
         
 
        if(currentNode.getEast()) {
@@ -158,15 +168,16 @@ int main() {
        }
     }
     std::cout << std::endl;
+
+    // print out the bottom line
     if(r==0) {
       for(int c=0; c<cols; ++c) {
           currentNode = maze[c];
           if(currentNode.getSouth()) 
-              std::cout << " --- ";
+              std::cout << " ----- ";
       }
     }
   }
-
-
+  std::cout << std::endl;
   return 0;
 }

@@ -6,8 +6,8 @@
 #include <queue>
 #include "Node.hpp"
 
-#define rows 6
-#define cols 6 
+#define rows 14
+#define cols 14 
 
 #define NORTH 0
 #define EAST 1
