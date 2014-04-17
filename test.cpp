@@ -100,8 +100,8 @@ int main() {
   std::cout << "the final node: " << rows*(rows/2)+cols/2 << std::endl;
   std::cout << "parent of the final node: " << (int) parent << std::endl;
 
-  shortestPath.push(final);
   // get shortest path by following parent node
+  shortestPath.push(final);
   while(parent != 0) {
     std::cout << "i'm here | finding shortest path" << std::endl;
      shortestPath.push(parent); 
@@ -110,6 +110,7 @@ int main() {
   }
   shortestPath.push(parent);
 
+  // print the shortest path
   std::cout << "The shortest path is: \n";
   while(!shortestPath.empty()) {
     std::cout << (int) shortestPath.top() << " ";
@@ -117,5 +118,55 @@ int main() {
   }
 
   std::cout << std::endl;
+
+  // print maze
+  for(int r=rows-1; r>=0; --r) {
+    for(int c=0; c<cols; ++c) {
+       currentNode = maze[cols*r+c];
+       if(currentNode.getNorth()) {
+           std::cout << " --- " ; 
+       } else {
+       
+           std::cout << "     ";
+       }
+    }
+    
+    std::cout << std::endl;
+
+    for(int c=0; c<cols; ++c) {
+       currentNode = maze[cols*r+c];
+       if(currentNode.getWest()) {
+         std::cout << "|"; 
+       } else {
+       
+         std::cout << " ";
+       }
+       
+       std::cout << cols*r+c;
+       if((cols*r+c)/10 == 0) {
+           std::cout << "  "; 
+       } else {
+          std::cout << " "; 
+       }
+       //std::cout << "   ";
+        
+
+       if(currentNode.getEast()) {
+         std::cout << "|";
+       } else {
+         std::cout << " ";
+       }
+    }
+    std::cout << std::endl;
+    if(r==0) {
+      for(int c=0; c<cols; ++c) {
+          currentNode = maze[c];
+          if(currentNode.getSouth()) 
+              std::cout << " --- ";
+      }
+    }
+  }
+
+
   return 0;
 }
