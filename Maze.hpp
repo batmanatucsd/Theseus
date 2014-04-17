@@ -6,8 +6,8 @@
 #include <queue>
 #include "Node.hpp"
 
-#define rows 6 
-#define cols 6 
+#define rows 16
+#define cols 16 
 
 #define NORTH 0
 #define EAST 1
@@ -34,7 +34,14 @@ class CompareNodes {
   public:
   bool operator() (const byte  & lhs, const byte & rhs) const {
     // lowest f value gets the highest priority
-    return maze[lhs].getF() > maze[rhs].getF(); 
+    // > means smaller values get higher priority
+    // < means higher values get higher priority
+    if(maze[lhs].getF() > maze[rhs].getF()) 
+        return true;
+    else if(maze[lhs].getF() < maze[rhs].getF()) 
+        return false;
+    else // if the f values are equal use h values to break the tie
+        return maze[lhs].getH() > maze[rhs].getH();
   }
 };
 
@@ -116,18 +123,16 @@ void setGValues(byte currentRow, byte currentCol) {
        
 }
 
+// functions for setting up walls
 void setNorth(byte cell) {
   maze[cell].setNorth(); maze[cell+neighbors[NORTH]].setSouth();
 }
-
 void setEast(byte cell) {
   maze[cell].setEast(); maze[cell+neighbors[EAST]].setWest();
 }
-
 void setWest(byte cell) {
   maze[cell].setWest(); maze[cell+neighbors[WEST]].setEast();
 }
-
 void setSouth(byte cell) {
   maze[cell].setSouth(); maze[cell+neighbors[SOUTH]].setNorth();
 }

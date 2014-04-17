@@ -4,6 +4,8 @@
 #include <vector>
 #include "Maze.hpp"
 
+#include <ctime>
+
 using namespace std;
 
 int main() {
@@ -82,7 +84,12 @@ int main() {
   /************************ DEBUG *****************************/
   /*************** Getting Shortest Path **********************/
 
+  clock_t time = clock();
+
   findShortestPath(); // find the shortest path when the maze is known
+
+  time = clock() - time;
+  std::cout << "elapsed time for a* algorithm: " << (float)time/CLOCKS_PER_SEC << std::endl;
 
   std::stack<byte> shortestPath;
   byte final = rows*(rows/2)+cols/2;
