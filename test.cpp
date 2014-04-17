@@ -103,7 +103,6 @@ int main(int argc, char * argv[]) {
   // get shortest path by following parent node
   shortestPath.push(final);
   while(parent != 0) {
-    std::cout << "i'm here | finding shortest path" << std::endl;
      shortestPath.push(parent); 
      currentNode = maze[parent];
      parent = currentNode.getParent();
