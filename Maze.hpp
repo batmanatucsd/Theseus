@@ -6,8 +6,8 @@
 #include <queue>
 #include "Node.hpp"
 
-#define rows 14
-#define cols 14 
+#define rows 16
+#define cols 16 
 
 #define NORTH 0
 #define EAST 1
@@ -79,8 +79,8 @@ class priority_queue : public std::priority_queue<T, Container, Compare> {
 void setMaze(std::vector<Node> & newMaze) {
   maze = newMaze; 
 
-  maze[0].setEast(); // set east wall of starting cell
-  maze[0+neighbors[EAST]].setWest();
+  //maze[0].setEast(); // set east wall of starting cell
+  //maze[0+neighbors[EAST]].setWest();
 
   // set walls around the boarders
   for(byte r=0; r<rows; ++r) {

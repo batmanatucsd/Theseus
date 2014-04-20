@@ -49,8 +49,10 @@ int main(int argc, char * argv[]) {
 
   /************************ DEBUG *****************************/
   /************** Printing out H values ***********************/
-  for(int i=0; i<rows*cols; ++i) {
+  for(int i=0; i<rows*cols; ++i) 
+  {
     cout << " h = " << maze[i].getH() << "  ";
+
     if(maze[i].getH()/10 == 0)
       cout << " ";
     if(i%rows == rows-1) 
@@ -60,7 +62,202 @@ int main(int argc, char * argv[]) {
   /************************ DEBUG *****************************/
   /*************** Setting Up the Walls ***********************/
 
-  setNorth(12);
+  //row 0 0-15
+  setEast(0);
+  for( int i = 2; i < 16; i++ )
+  {
+    if( i != 8 )
+      setNorth(i);
+  }
+
+  //row 1 16-31
+  setEast(16);
+  setEast(17);
+  for( int i = 19; i < 30; i++ )
+  {
+    setNorth(i);
+  }
+  setEast(30);
+
+  //row 2 32-47
+  setEast(32);
+  setEast(33);
+  for( int i = 35; i < 45; i++ )
+  {
+    if( i != 40 )
+      setNorth(i);
+  }
+
+  //row 3 48-63
+  setEast(49);
+  setNorth(51);
+  setNorth(54);
+  setNorth(55);
+  setNorth(56);
+  setNorth(57);
+  setNorth(59);
+  setNorth(60);
+  setEast(61);
+  setEast(62);
+
+  //row 4 64-79
+  setEast(64);
+  setEast(65);
+  setEast(66);
+  setEast(67);
+  setEast(68);
+  for( int i = 70; i < 78; i++)
+  {
+    setNorth(i);
+  }
+  setEast(77);
+  
+  setEast(78);
+
+  //row 5 80-95
+  setEast(80);
+  setEast(81);
+  setEast(82);
+  setEast(83);
+  setEast(84);
+  setEast(85);
+  setNorth(87);
+  setNorth(88);
+  setNorth(89);
+  setEast(92);
+  setEast(93);
+  setEast(94);
+
+  //row 6 96-111
+  setEast(96);
+  setEast(97);
+  setEast(99);
+  setEast(100);
+  setEast(101);
+  setNorth(103);
+  setNorth(104);
+  setNorth(105);
+  setEast(106);
+  setEast(107);
+  setNorth(107);
+  setEast(108);
+  setEast(109);
+  setEast(110);
+  setNorth(110);
+  //row 7 112 - 127
+  for( int i = 113; i < 123; i++)
+  {
+    if( i!=119 )
+      setEast(i);
+  }
+  setNorth(123);
+  setEast(124);
+  setEast(126);
+  setNorth(126);
+
+  //row 8 128 - 143
+  for( int i = 128; i < 135; i++ )
+  {
+    setEast(i);
+  }
+  setNorth(135);
+  setNorth(136);
+  setEast(137);
+  setEast(138);
+  
+  //row 9 144-159
+  for( int i = 144; i < 150; i++ )
+  {
+    if( i != 147 )
+      setEast(i);
+  }
+  setNorth(151);
+  setNorth(152);
+  
+  for( int i = 153; i < 159; i++ )
+  {
+    setEast(i);
+  }
+  
+
+  // row 10 160-175
+  for( int i = 160; i < 167; i++ )
+  {
+    setEast(i);
+  }
+  setNorth(167);
+  setEast(168);
+  setNorth(169);
+  setEast(169);
+  for( int i = 170; i < 175; i++ )
+  {
+    setEast(i);
+  }
+
+  //row 11 176 - 191
+  for(int i = 177; i < 182; i++)
+  {
+    setEast(i);
+  }
+  for(int i = 183; i < 187; i++)
+  {
+    setNorth(i);
+  }
+  setEast(186);
+  for(int i = 187; i < 191; i++)
+  {
+    setEast(i);
+  }
+
+  //row 12 192 - 207
+  for(int i = 192; i < 198; i++ )
+  {
+    setEast(i);
+  }
+  
+  for(int i = 198; i < 202; i++ )
+  {
+    setNorth(i);
+  }
+
+  for(int i = 202; i < 207; i++ )
+  {
+    setEast(i);
+  }
+
+  //row 13 208 - 223
+  for( int i = 208; i < 213; i++ )
+  {
+    setEast(i);
+  }
+
+  for( int i = 214; i < 221; i++ )
+  {
+    setNorth(i);
+  }
+
+  for( int i = 218; i < 223; i++ )
+  {
+    setEast(i);
+  }
+  
+  //row 14 224 - 239 
+  for( int i = 224; i < 239; i++ )
+  {
+    if ( i < 230 && i != 228 || i == 238)
+    {
+      setEast(i);
+    }
+    if( i > 229 )
+    {
+      setNorth(i);
+    }
+  } 
+
+  //row 15 240 -255
+  setEast(240);
+  
+  /*setNorth(12);
   setEast(1);
   setNorth(7);
   setNorth(8);
@@ -77,7 +274,7 @@ int main(int argc, char * argv[]) {
   setNorth(25);
   setNorth(26);
   setEast(26);
-  setEast(28);
+  setEast(28);*/
 
 
 
@@ -123,7 +320,8 @@ int main(int argc, char * argv[]) {
     for(int c=0; c<cols; ++c) {
        currentNode = maze[cols*r+c];
        if(currentNode.getNorth()) {
-           std::cout << " ----- " ; 
+           std::cout << " ----- " ;
+	                
        } else {
        
            std::cout << "       ";
@@ -144,7 +342,8 @@ int main(int argc, char * argv[]) {
        
        if(argc != 1) {
            std::cout << " ";
-           std::cout << cols*r+c;
+	   std::cout << cols * r + c;
+	   
            if((cols*r+c)/10 == 0) {
                std::cout << "   "; 
            } else {
