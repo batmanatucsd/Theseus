@@ -2,12 +2,15 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <random>
 #include "Maze.hpp"
 
 #include <ctime>
 
 using namespace std;
-
+void mazeOne();
+void randMaze();
+void randWalls( int i, int rand1, int rand2);
 int main(int argc, char * argv[]) {
   
  /*
@@ -62,7 +65,138 @@ int main(int argc, char * argv[]) {
   /************************ DEBUG *****************************/
   /*************** Setting Up the Walls ***********************/
 
-  //row 0 0-15
+ 
+  //mazeOne();
+  randMaze(); 
+  /*setNorth(12);
+  setEast(1);
+  setNorth(7);
+  setNorth(8);
+  setNorth(9);
+  setWest(9);
+  setSouth(10);
+  setEast(10);
+  setWest(17);
+  setEast(13);
+  setEast(19);
+  setNorth(20);
+  setNorth(21);
+  setEast(21);
+  setNorth(25);
+  setNorth(26);
+  setEast(26);
+  setEast(28);*/
+
+
+
+  /************************ DEBUG *****************************/
+  /*************** Getting Shortest Path **********************/
+
+  clock_t time = clock();
+
+  findShortestPath(); // find the shortest path when the maze is known
+
+  time = clock() - time;
+  std::cout << "elapsed time for a* algorithm: " << (float)time/CLOCKS_PER_SEC << std::endl;
+
+  std::stack<byte> shortestPath;
+  byte final = rows*(rows/2)+cols/2;
+  Node currentNode = maze[final];
+  byte parent = currentNode.getParent();
+
+
+  std::cout << "the final node: " << rows*(rows/2)+cols/2 << std::endl;
+  std::cout << "parent of the final node: " << (int) parent << std::endl;
+
+  // get shortest path by following parent node
+  shortestPath.push(final);
+  while(parent != 0) {
+     shortestPath.push(parent); 
+     currentNode = maze[parent];
+     parent = currentNode.getParent();
+  }
+  shortestPath.push(parent);
+
+  // print the shortest path
+  std::cout << "The shortest path is: ";
+  while(!shortestPath.empty()) {
+    std::cout << (int) shortestPath.top() << " ";
+    shortestPath.pop();
+  }
+
+  std::cout << std::endl;
+
+  // print maze
+  for(int r=rows-1; r>=0; --r) {
+    for(int c=0; c<cols; ++c) {
+       currentNode = maze[cols*r+c];
+       if(currentNode.getNorth()) {
+           std::cout << " ----- " ;
+	                
+       } else {
+       
+           std::cout << "       ";
+       }
+    }
+    
+    std::cout << std::endl;
+
+    for(int c=0; c<cols; ++c) {
+       currentNode = maze[cols*r+c];
+
+       if(currentNode.getWest()) {
+         std::cout << "|"; 
+       } else {
+       
+         std::cout << " ";
+       }
+       
+       if(argc != 1) {
+           std::cout << " ";
+	   std::cout << cols * r + c;
+	   
+           if((cols*r+c)/10 == 0) {
+               std::cout << "   "; 
+           } else {
+                if((cols*r+c)/100 == 0 ) 
+                    std::cout << "  "; 
+                else {
+                    std::cout << " "; 
+                }
+           }
+       } else {
+           std::cout << "     ";
+       }
+       
+        
+
+       if(currentNode.getEast()) {
+         std::cout << "|";
+       } else {
+         std::cout << " ";
+       }
+    }
+    std::cout << std::endl;
+
+    // print out the bottom line
+    if(r==0) {
+      for(int c=0; c<cols; ++c) {
+          currentNode = maze[c];
+          if(currentNode.getSouth()) 
+              std::cout << " ----- ";
+      }
+    }
+  }
+  std::cout << std::endl;
+
+  
+
+  return 0;
+}
+
+void mazeOne()
+{
+ //row 0 0-15
   setEast(0);
   for( int i = 2; i < 16; i++ )
   {
@@ -256,126 +390,35 @@ int main(int argc, char * argv[]) {
 
   //row 15 240 -255
   setEast(240);
-  
-  /*setNorth(12);
-  setEast(1);
-  setNorth(7);
-  setNorth(8);
-  setNorth(9);
-  setWest(9);
-  setSouth(10);
-  setEast(10);
-  setWest(17);
-  setEast(13);
-  setEast(19);
-  setNorth(20);
-  setNorth(21);
-  setEast(21);
-  setNorth(25);
-  setNorth(26);
-  setEast(26);
-  setEast(28);*/
-
-
-
-  /************************ DEBUG *****************************/
-  /*************** Getting Shortest Path **********************/
-
-  clock_t time = clock();
-
-  findShortestPath(); // find the shortest path when the maze is known
-
-  time = clock() - time;
-  std::cout << "elapsed time for a* algorithm: " << (float)time/CLOCKS_PER_SEC << std::endl;
-
-  std::stack<byte> shortestPath;
-  byte final = rows*(rows/2)+cols/2;
-  Node currentNode = maze[final];
-  byte parent = currentNode.getParent();
-
-
-  std::cout << "the final node: " << rows*(rows/2)+cols/2 << std::endl;
-  std::cout << "parent of the final node: " << (int) parent << std::endl;
-
-  // get shortest path by following parent node
-  shortestPath.push(final);
-  while(parent != 0) {
-     shortestPath.push(parent); 
-     currentNode = maze[parent];
-     parent = currentNode.getParent();
-  }
-  shortestPath.push(parent);
-
-  // print the shortest path
-  std::cout << "The shortest path is: \n";
-  while(!shortestPath.empty()) {
-    std::cout << (int) shortestPath.top() << " ";
-    shortestPath.pop();
-  }
-
-  std::cout << std::endl;
-
-  // print maze
-  for(int r=rows-1; r>=0; --r) {
-    for(int c=0; c<cols; ++c) {
-       currentNode = maze[cols*r+c];
-       if(currentNode.getNorth()) {
-           std::cout << " ----- " ;
-	                
-       } else {
-       
-           std::cout << "       ";
-       }
-    }
-    
-    std::cout << std::endl;
-
-    for(int c=0; c<cols; ++c) {
-       currentNode = maze[cols*r+c];
-
-       if(currentNode.getWest()) {
-         std::cout << "|"; 
-       } else {
-       
-         std::cout << " ";
-       }
-       
-       if(argc != 1) {
-           std::cout << " ";
-	   std::cout << cols * r + c;
-	   
-           if((cols*r+c)/10 == 0) {
-               std::cout << "   "; 
-           } else {
-                if((cols*r+c)/100 == 0 ) 
-                    std::cout << "  "; 
-                else {
-                    std::cout << " "; 
-                }
-           }
-       } else {
-           std::cout << "     ";
-       }
-       
-        
-
-       if(currentNode.getEast()) {
-         std::cout << "|";
-       } else {
-         std::cout << " ";
-       }
-    }
-    std::cout << std::endl;
-
-    // print out the bottom line
-    if(r==0) {
-      for(int c=0; c<cols; ++c) {
-          currentNode = maze[c];
-          if(currentNode.getSouth()) 
-              std::cout << " ----- ";
-      }
-    }
-  }
-  std::cout << std::endl;
-  return 0;
 }
+
+void randMaze()
+{
+
+  setEast(0);
+  setEast(16);
+  setEast(32);
+  srand( time(NULL) );
+
+  for( int i = 0; i < 256; i++ )
+  {
+    if( i != 16 && i != 0 && i != 32 )
+    {
+      randWalls( i, rand()%4, rand()%8 );
+    }
+  }
+}
+
+void randWalls( int i, int rand1, int rand2 )
+{
+  if( rand1 % 2 == 0 && rand1 > 1 )
+  {
+    setWest(i);
+  }
+  
+  if( rand2 % 2 == 0 )
+  {
+    setNorth( i );
+  }
+}
+
