@@ -8,9 +8,9 @@ typedef unsigned char byte;
 class Node {
   public:
     /********** Member Variables **********/
-    int f=0, g=0, h=0;
-    byte parent = 0;
-    byte info = 0;
+    int f, g, h;
+    byte parent;
+    byte info;
     
     /********** Member Functions **********/
     // North East West South Visited
@@ -29,6 +29,7 @@ class Node {
     
     // getters and setters for visited bit
     void visit() {info = info | 0x10;}
+    void unVisit() {info = info & 0xef;}
     bool isVisited() const {return info & 0x10;}
 
     // f = g + h
@@ -42,6 +43,7 @@ class Node {
 
     // setters for the f, g, h
     void setF() {f = g+h;}
+    void setF(byte newF) {f = newF;}
     void setG(int newG) {g = newG; setF();}
     void setH(int newH) {h = newH; setF();}
 
