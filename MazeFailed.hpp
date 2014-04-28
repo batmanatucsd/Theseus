@@ -253,7 +253,8 @@ void findShortestPath() {
         queue.push(neighbor);
 
     ///////// DEBUG MESSAGE ///////////////
-    std::cout << "  updating the neighbor " << "G: " << (int)newG 
+    std::cout << "  updating the neighbor" 
+              << " G: " << (int)newG 
               << " H: " << neighborNode->getH() 
               << " F: " << neighborNode->getF(); 
 

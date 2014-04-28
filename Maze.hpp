@@ -169,7 +169,11 @@ void findShortestPath() {
     currentNode->visit(); // add current node to closed list
 
     ///////// DEBUG MESSAGE ///////////////
-    std::cout << "i'm here and CURRENT: " << (int) current << std::endl;
+    std::cout << "i'm here and CURRENT: " << (int) current 
+              << " g: " << currentNode->getG()
+              << " h: " << currentNode->getH()
+              << " f: " << currentNode->getF()
+              << std::endl;
 
     // loop through all its neighbor
     for(byte next=0; next<4; ++next) {
@@ -214,7 +218,7 @@ void findShortestPath() {
         continue;
 
       // evaluate new g value
-      newG = currentNode->getG() + neighborNode->getG();
+      newG = currentNode->getG() + 1; 
 
       // REMINDER: queue holds indices of nodes
       //           Type of neighbor is byte
@@ -226,10 +230,13 @@ void findShortestPath() {
 
       // if the neighbor is in open OR 
       // the new g value is smaller than the old g value
-      if(!isInOpen || newG < currentNode->getG()) {
+      if(!isInOpen || newG < neighborNode->getG()) {
 
     ///////// DEBUG MESSAGE ///////////////
-    std::cout << "  updating the neighbor"; 
+    std::cout << "  updating the neighbor" 
+              << " G: " << (int)newG 
+              << " H: " << neighborNode->getH() 
+              << " F: " << neighborNode->getF(); 
 
         neighborNode->setParent(current); // set parent
         neighborNode->setG(newG); // set new g value
