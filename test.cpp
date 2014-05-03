@@ -23,7 +23,7 @@ void setRealWest(byte cell) {
 void setRealSouth(byte cell) {
   realMaze[cell].setSouth(); realMaze[cell+neighbors[SOUTH]].setNorth();
 }
-
+void randNumbers();
 void setRealMaze();
 void mazeOne();
 void randMaze();
@@ -60,7 +60,6 @@ int main(int argc, char * argv[]) {
  
   //mazeOne();
   randMaze(); 
-
   /************************ DEBUG *****************************/
   /*************** Getting Shortest Path **********************/
 
@@ -390,25 +389,46 @@ void mazeOne()
   setRealEast(240);
 }
 
+void randNumbers()
+{
+  srand(time(NULL));
+  for( int i = 0; i < 256; i++)
+  {
+    
+  }
+}
+
 void randMaze()
 {
 
   setRealEast(0);
   setRealEast(16);
   setRealEast(32);
+  setRealNorth( 136 );
+  setRealNorth( 135 );
+  setRealWest( 135 );
+  setRealWest( 119 );
+  setRealSouth( 119 );
+  setRealSouth( 120 );
+  setRealEast( 120 );
   srand( time(NULL) );
-
-  for( int i = 0; i < 256; i++ )
+  
+  for( int i = 0; i < 300; i++ )
   {
-    if( i != 16 && i != 0 && i != 32 )
+    int num = rand()%256;
+    if( num != 16 && num != 0 && num != 32 && num != 136 
+	&& num != 135 && num != 119 && num != 120 && num != 137 &&
+	num !=48 && num != 49 )
     {
-      randWalls( i, rand()%4, rand()%8 );
+      randWalls( num, rand()%4, rand()%8 );
     }
   }
 }
 
 void randWalls( int i, int rand1, int rand2 )
 {
+  cout << i << " " << rand1 << " " << rand2 << endl;
+
   if( rand1 % 2 == 0 && rand1 > 1 )
   {
     setRealWest(i);
