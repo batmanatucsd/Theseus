@@ -1,7 +1,10 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-//#define INFINITY 999 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
 
 typedef unsigned char byte;
 
@@ -14,7 +17,7 @@ class Node {
     
     /********** Member Functions **********/
     // North East West South Visited
-    // info bit 000VSWEN
+    // info bit 001VSWEN
     // setters for the walls 
     void setNorth() { info = info | 0x01; }
     void setEast() { info = info | 0x02; }
@@ -22,15 +25,24 @@ class Node {
     void setSouth() { info = info | 0x08; }
 
     // getters for the walls 
-    bool getNorth() const {return info & 0x01;}
-    bool getEast() const {return info & 0x02;}
-    bool getWest() const {return info & 0x04;}
-    bool getSouth() const {return info & 0x08;}
+    bool getWall(byte wall) const {
+      switch(wall) {
+        case NORTH: return info & 0x01;
+        case EAST: return info & 0x02;
+        case WEST: return info & 0x04;
+        case SOUTH: return info & 0x08;
+        default: return true;
+      }
+    }
     
     // getters and setters for visited bit
     void visit() {info = info | 0x10;}
     void unVisit() {info = info & 0xef;}
     bool isVisited() const {return info & 0x10;}
+
+    // getters and setters for visited bit
+    void map() {info = info | 0x20;}
+    bool isMapped() const {return info & 0x20;}
 
     // f = g + h
     // h = distance from current to finish node

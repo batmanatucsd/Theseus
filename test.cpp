@@ -1,11 +1,10 @@
-
 #include <iostream>
 #include <stack>
 #include <vector>
 #include <random>
-#include "Maze.hpp"
-
 #include <ctime>
+
+#include "maze.hpp"
 
 using namespace std;
 std::vector<Node> realMaze(256);
@@ -30,54 +29,67 @@ void randMaze();
 void randWalls( int i, int rand1, int rand2);
 void printMaze(const std::vector<Node>&, int argc = 0);
 
-
 int main(int argc, char * argv[]) {
-  
+  std::cout << "\n**************************************************************************************************\n";
+  std::cout << "**************************************************************************************************\n";
+
   // Initial Setup for the real maze
   setRealMaze();
-
-  // Initial Setup
-  std::vector<Node> newMaze(256);  
-  setMaze(newMaze); // set up Maze
-  setHValues(); // set H values on maze
-  
-
-  /************************ DEBUG *****************************/
-  /************** Printing out H values ***********************/
-  for(int i=0; i<rows*cols; ++i) 
-  {
-    cout << " h = " << maze[i].getH() << "  ";
-
-    if(maze[i].getH()/10 == 0)
-      cout << " ";
-    if(i%rows == rows-1) 
-      cout << endl;
-  }
 
   /************************ DEBUG *****************************/
   /*************** Setting Up the Walls ***********************/
 
- 
   //mazeOne();
   randMaze(); 
+  setFakeMaze(realMaze);
+
+
+  /************************************************************/
+  /*********************** Setting Up  ************************/
+  // Initial Setup for our maze
+  std::vector<Node> newMaze(256);  
+  setMaze(newMaze); // set up Maze
+
+  setHValues(GOAL); // set H values on maze
+  
+  mapMaze(); // mapping maze
+
+
+  /************************ DEBUG *****************************/
+  /************** Printing out H values ***********************/
+  // for(int i=0; i<ROWS*COLS; ++i) 
+  // {
+  //   cout << " h = " << maze[i].getH() << "  ";
+
+  //   if(maze[i].getH()/10 == 0)
+  //     cout << " ";
+  //   if(i%ROWS == ROWS-1) 
+  //     cout << endl;
+  // }
+
 
   /************************ DEBUG *****************************/
   /*************** Getting Shortest Path **********************/
+  std::cout << "\n**************************************************************************************************\n";
+  std::cout << "**************************************************************************************************\n";
 
   clock_t time = clock();
 
   findShortestPath(); // find the shortest path when the maze is known
 
   time = clock() - time;
+
+  std::cout << "\n**************************************************************************************************\n";
+  std::cout << "**************************************************************************************************\n";
+
   std::cout << "elapsed time for a* algorithm: " << (float)time/CLOCKS_PER_SEC << std::endl;
 
   std::stack<byte> shortestPath;
-  byte final = rows*(rows/2)+cols/2;
+  byte final = ROWS*(ROWS/2)+COLS/2;
   Node currentNode = maze[final];
   byte parent = currentNode.getParent();
 
-
-  std::cout << "the final node: " << rows*(rows/2)+cols/2 << std::endl;
+  std::cout << "the final node: " << ROWS*(ROWS/2)+COLS/2 << std::endl;
   std::cout << "parent of the final node: " << (int) parent << std::endl;
 
   // get shortest path by following parent node
@@ -89,13 +101,17 @@ int main(int argc, char * argv[]) {
   }
   shortestPath.push(parent);
 
-
-
   /************************ DEBUG *****************************/
   /****************** Printing the Maze ***********************/
+  std::cout << "\n**************************************************************************************************\n";
+  std::cout << "**************************************************************************************************\n";
 
   std::cout << ">>>>>>>>>>>>>>>>>>>> The Real Maze: <<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
-  printMaze(realMaze, argc);
+  printMaze(realMaze, argc); // printing the real maze
+
+
+  std::cout << std::endl;
+  std::cout << ">>>>>>>>>>>>>>>>>>>>>> Our Maze: <<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 
   // print the shortest path
   std::cout << "The shortest path is: ";
@@ -103,22 +119,22 @@ int main(int argc, char * argv[]) {
     std::cout << (int) shortestPath.top() << " ";
     shortestPath.pop();
   }
-
   std::cout << std::endl;
-  std::cout << ">>>>>>>>>>>>>>>>>>>>>> Our Maze: <<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
-  printMaze(maze);
+
+  printMaze(maze); // printing our maze
+
 
   return 0;
-}
+} // end of main
 
 // print maze
 void printMaze(const std::vector<Node>& mazeToPrint, int argc) {
   Node currentNode;
 
-  for(int r=rows-1; r>=0; --r) {
-    for(int c=0; c<cols; ++c) {
-       currentNode = mazeToPrint[cols*r+c];
-       if(currentNode.getNorth()) {
+  for(int r=ROWS-1; r>=0; --r) {
+    for(int c=0; c<COLS; ++c) {
+       currentNode = mazeToPrint[COLS*r+c];
+       if(currentNode.getWall(NORTH)) {
            std::cout << " ----- " ;
 	                
        } else {
@@ -129,10 +145,10 @@ void printMaze(const std::vector<Node>& mazeToPrint, int argc) {
     
     std::cout << std::endl;
 
-    for(int c=0; c<cols; ++c) {
-       currentNode = mazeToPrint[cols*r+c];
+    for(int c=0; c<COLS; ++c) {
+       currentNode = mazeToPrint[COLS*r+c];
 
-       if(currentNode.getWest()) {
+       if(currentNode.getWall(WEST)) {
          std::cout << "|"; 
        } else {
        
@@ -141,24 +157,25 @@ void printMaze(const std::vector<Node>& mazeToPrint, int argc) {
        
        if(argc != 1) {
            std::cout << " ";
-	   std::cout << cols * r + c;
+	   std::cout << COLS * r + c;
 	   
-           if((cols*r+c)/10 == 0) {
+           if((COLS*r+c)/10 == 0) {
                std::cout << "   "; 
            } else {
-                if((cols*r+c)/100 == 0 ) 
+                if((COLS*r+c)/100 == 0 ) 
                     std::cout << "  "; 
                 else {
                     std::cout << " "; 
                 }
            }
        } else {
-           std::cout << "     ";
+           if(COLS*r+c == 136)
+               std::cout << "*    ";
+           else
+               std::cout << "     ";
        }
        
-        
-
-       if(currentNode.getEast()) {
+       if(currentNode.getWall(EAST)) {
          std::cout << "|";
        } else {
          std::cout << " ";
@@ -168,9 +185,9 @@ void printMaze(const std::vector<Node>& mazeToPrint, int argc) {
 
     // print out the bottom line
     if(r==0) {
-      for(int c=0; c<cols; ++c) {
+      for(int c=0; c<COLS; ++c) {
           currentNode = mazeToPrint[c];
-          if(currentNode.getSouth()) 
+          if(currentNode.getWall(SOUTH)) 
               std::cout << " ----- ";
       }
     }
@@ -178,17 +195,16 @@ void printMaze(const std::vector<Node>& mazeToPrint, int argc) {
   std::cout << std::endl;
 }
 
-
 void setRealMaze() {
   // set walls around the boarders
-  for(byte r=0; r<rows; ++r) {
-    realMaze[cols*r].setWest(); // set WEST wall
-    realMaze[cols*r+cols-1].setEast(); // set EAST wall
+  for(byte r=0; r<ROWS; ++r) {
+    realMaze[COLS*r].setWest(); // set WEST wall
+    realMaze[COLS*r+COLS-1].setEast(); // set EAST wall
   }
 
-  for(byte c=0; c<cols; ++c) {
+  for(byte c=0; c<COLS; ++c) {
     realMaze[c].setSouth(); // set South wall
-    realMaze[cols*(rows-1) + c].setNorth(); // set North wall
+    realMaze[COLS*(ROWS-1) + c].setNorth(); // set North wall
   }
 }
 
