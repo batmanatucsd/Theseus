@@ -443,7 +443,7 @@ void randMaze()
 
 void randWalls( int i, int rand1, int rand2 )
 {
-  cout << i << " " << rand1 << " " << rand2 << endl;
+  //cout << i << " " << rand1 << " " << rand2 << endl;
 
   if( rand1 % 2 == 0 && rand1 > 1 )
   {
