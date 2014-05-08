@@ -1,0 +1,17 @@
+
+
+
+close left
+close right
+
+
+left open
+right open
+both closed
+both open
+
+
+void readSensors() {
+  // takes care of computation
+
+}
