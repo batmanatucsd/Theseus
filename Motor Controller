@@ -1,0 +1,77 @@
+//const int analogInPin = ; // Analog input pin that the potentiometer
+                            // is attached to
+//const int analogInPin2 = ;
+
+const int pwmOutPin = 26;    // PWM pin that the LED is attached to
+const int Ain2 = 22;
+const int Ain1 = 21;
+const int stby = 17;
+
+const int pwmOutPin2 = 25; 
+const int Bin2 =19;
+const int Bin1 =20; 
+
+
+// These variables will change:
+int sensorValue = 0;        // value read from the pot
+int outputValue = 0;        // value output to the PWM
+
+
+int sensorValue2 = 0;        // value read from the pot
+int outputValue2 = 0;        // value output to the PWM
+
+void setup() {
+    // Configure the ADC pin
+   // pinMode(analogInPin, INPUT_ANALOG);
+//    // Configure LED pin
+//    pinMode(pwmOutPin, PWM);
+  pinMode(pwmOutPin, PWM);
+  pinMode(Ain2, OUTPUT);
+  pinMode(Ain1, OUTPUT);
+  pinMode(stby, OUTPUT);
+ 
+  pinMode(pwmOutPin2, PWM); 
+  pinMode(Bin2, OUTPUT);
+  pinMode(Bin1, OUTPUT);
+  
+
+}
+
+void loop() {
+    // read the analog in value:
+   // sensorValue = analogRead(analogInPin);
+    //sensorValue2 = analogRead(analogInPin2);
+//    // map it to the range of the analog out:
+// digitalWrite(13, HIGH);
+  digitalWrite(stby, HIGH);
+  
+  digitalWrite(Ain2, LOW);
+  digitalWrite(Ain1, HIGH);
+  
+
+  digitalWrite(Bin2, LOW);
+  digitalWrite(Bin1, HIGH);
+  //digitalWrite(stby2, HIGH);
+
+ // outputValue = map(sensorValue, 0, 4095, 0, 65535);
+  //outputValue2 = map(sensorValue2, 0, 4095, 0, 65535);
+//    // change the analog out vaue:
+    // int pwmValue = 80;
+     // int outputValue = map(pwmValue, 0, 100, 0, 65535);
+     outputValue = 600;
+    pwmWrite(pwmOutPin, outputValue * 16);
+   
+    //SerialUSB.print("  ");
+   pwmWrite(pwmOutPin2, outputValue * 16);
+   
+     //SerialUSB.println("  ");
+    // digitalWrite(pwmOutPin, HIGH);
+//
+//    // print the results to the serial monitor:
+   // SerialUSB.print("sensor = " );
+   // SerialUSB.print(sensorValue);
+   //  SerialUSB.print("\t output = ");
+   //  SerialUSB.println(outputValue);
+   //  delay(100);
+
+}
