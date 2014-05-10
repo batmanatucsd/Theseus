@@ -17,7 +17,7 @@ class Node {
     
     /********** Member Functions **********/
     // North East West South Visited
-    // info bit 001VSWEN
+    // info bit 0OMVSWEN
     // setters for the walls 
     void setNorth() { info = info | 0x01; }
     void setEast() { info = info | 0x02; }
@@ -26,6 +26,7 @@ class Node {
 
     // getters for the walls 
     bool getWall(byte wall) const {
+
       switch(wall) {
         case NORTH: return info & 0x01;
         case EAST: return info & 0x02;
@@ -33,6 +34,7 @@ class Node {
         case SOUTH: return info & 0x08;
         default: return true;
       }
+
     }
     
     // getters and setters for visited bit
@@ -43,6 +45,11 @@ class Node {
     // getters and setters for visited bit
     void map() {info = info | 0x20;}
     bool isMapped() const {return info & 0x20;}
+
+    // getters and setters for visited bit
+    void putInOpen() {info = info | 0x40;}
+    void removeFromOpen() {info = info & 0xbf;}
+    bool isInOpen() const {return info & 0x40;}
 
     // f = g + h
     // h = distance from current to finish node

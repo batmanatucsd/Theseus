@@ -13,13 +13,16 @@ const char neighbors[] = {COLS, 1, -COLS, -1}; // NORTH, EAST, SOUTH, WEST
 /************ CompareNodes Function  ************/ 
 /************************************************/
 bool CompareNodes::operator() (const byte & lhs, const byte & rhs) const {
+
   // lowest f value gets the highest priority
   // > means smaller values get higher priority
   // < means higher values get higher priority
   if(maze[lhs].getF() > maze[rhs].getF()) 
       return true;
+
   else if(maze[lhs].getF() < maze[rhs].getF()) 
       return false;
+
   else // if the f values are equal use h values to break the tie
       return maze[lhs].getH() > maze[rhs].getH();
 }
@@ -28,9 +31,8 @@ bool CompareNodes::operator() (const byte & lhs, const byte & rhs) const {
 /************* Function Definitions *************/ 
 /************************************************/
 void setMaze(std::vector<Node> & newMaze) {
-  maze = newMaze; 
 
-  
+  maze = newMaze; 
   setWall(EAST);
 
   // set walls around the boarders
@@ -49,14 +51,14 @@ void setMaze(std::vector<Node> & newMaze) {
 // h = current to finish node
 // h = 10 * (abs(currentRow - ROWS/2) + abs(currentCol - COLS/2));
 void setHValues(byte finish) {
-  int row = finish/COLS, col = finish%COLS;
-  for(int index=0; index<ROWS*COLS; ++index) {
-    // if H values are going to be these, 
-    // get rid off local variables
-    int currentRow = index/COLS, currentCol = index%COLS;
-    maze[index].setH(abs(currentRow-row) + abs(currentCol-col));
 
-    /*
+  int row = finish/COLS, col = finish%COLS;
+
+  // if H values are going to be these, get rid off local variables
+  for(int index=0; index<ROWS*COLS; ++index) {
+    int currentRow = index/COLS, currentCol = index%COLS;
+    //maze[index].setH(abs(currentRow-row) + abs(currentCol-col));
+
     if(currentRow >= ROWS/2 && currentCol >= COLS/2) { // QI
       maze[index].setH(currentRow + currentCol - COLS);
 
@@ -69,21 +71,27 @@ void setHValues(byte finish) {
     } else if(currentRow < ROWS/2 && currentCol >= COLS/2) { // QIV
       maze[index].setH(currentCol - currentRow - 1);
     }
-    */
   }
 }
 
+
+
 void setWall(byte wall, byte cell) {
+
   switch(wall) {
+
     case NORTH:
       maze[cell].setNorth(); maze[cell+neighbors[NORTH]].setSouth();
       return;
+      
     case EAST:
       maze[cell].setEast(); maze[cell+neighbors[EAST]].setWest();
       return;
+
     case WEST:
       maze[cell].setWest(); maze[cell+neighbors[WEST]].setEast();
       return;
+
     case SOUTH:
       maze[cell].setSouth(); maze[cell+neighbors[SOUTH]].setNorth();
       return;
@@ -91,13 +99,14 @@ void setWall(byte wall, byte cell) {
 }
 
 void findShortestPath() {
+
   // reset values
   resetGValues();
   resetParents();
   resetVisited();
 
   //std::priority_queue <byte, std::vector<byte>, CompareNodes> queue; // open list
-  priority_queue<byte, std::vector<byte>, CompareNodes> queue; // open list
+  std::priority_queue<byte, std::vector<byte>, CompareNodes> queue; // open list
 
   queue.push(0);
   maze[0].setG(0); // set g value of the start
@@ -110,6 +119,7 @@ void findShortestPath() {
     std::cout << "this is the first one: " <<  queue.top() << std::endl;
 
   while(!queue.empty()) {
+
     currentCell = queue.top();
 
     // if the currentCell is the finish node
@@ -120,6 +130,7 @@ void findShortestPath() {
 
     currentNode = &maze[currentCell];
     currentNode->visit(); // add current node to closed list
+    currentNode->removeFromOpen(); // mark the current node out of open list
 
     ///////// DEBUG MESSAGE ///////////////
     std::cout << "i'm here and CURRENT: " << (int) currentCell 
@@ -159,7 +170,8 @@ void findShortestPath() {
       // REMINDER: queue holds indices of nodes
       //           Type of nextCell is byte
       //           Type of neighborNode is Node
-      bool isInOpen = queue.find(nextCell) != queue.end() ? true : false;
+      //bool isInOpen = queue.find(nextCell) != queue.end() ? true : false;
+      bool isInOpen = neighborNode->isInOpen();
       
     ///////// DEBUG MESSAGE ///////////////
     std::cout << "             nextCell: " << (int) nextCell; 
@@ -181,6 +193,7 @@ void findShortestPath() {
         // if not, add the nextCell into the open set
         if(!isInOpen) {
           queue.push(nextCell); 
+          neighborNode->putInOpen(); // mark the node as in open
         }
       }
       std::cout << std::endl;
@@ -190,23 +203,24 @@ void findShortestPath() {
 } // end of findShortestPath
 
 void mapMaze() {
+
   bool keepMapping = true, reachedGoal = false;
   Node* currentNode;
 
   int counter = 0;
 
-  
   // for each cells visited
   while(keepMapping) {
-    priority_queue<byte, std::vector<byte>, CompareNodes> queue; // available cells list 
+
+    std::priority_queue<byte, std::vector<byte>, CompareNodes> queue; // available cells list 
     currentNode = &maze[currentCell]; // get currentNode
   
     std::cout << counter << "th current cell: " << (int) currentCell << std::endl;
 
     // if the current node is not visited
     if(!currentNode->isMapped()) {
-      // mark the cell that it has been mapped 
-      currentNode->map();
+
+      currentNode->map(); // mark the cell that it has been mapped 
       counter++; // when visiting new cell, increment counter
 
       // check sensors using checkForWalls function
@@ -218,6 +232,7 @@ void mapMaze() {
     // keep track of the smallest g value 
     // and choose the best option
     for(byte side=0; side<4; ++side) {
+
       if(currentNode->getWall(side)) continue; // if theres wall, do nothing
 
       nextCell = currentCell + neighbors[side]; // get next cell index
@@ -225,13 +240,13 @@ void mapMaze() {
       if(!maze[nextCell].isMapped()) { // if the new cell is not visited
         // if changing the g value each time doesn't work,
         // try comparing the g value, and if lower g value can be stored, store the lower.
-        maze[nextCell].setG(currentNode->getG() + COST);
+        maze[nextCell].setG(0);
         if(!maze[nextCell].getParent()) // if there is no parent
           maze[nextCell].setParent(currentCell); // set parent of nextCell to currentCell
         // only add cells that are haven't been visited
         queue.push(nextCell);
       }
-    }
+    } // end of for() loop
 
     // if there are three walls and or no new cells to visit, move to parent
     // this is when the queue is empty
@@ -243,7 +258,7 @@ void mapMaze() {
     // needs to go back to the start cell
     if(currentCell == GOAL) {
       reachedGoal = true;
-      setHValues(0);
+      //setHValues(0);
     }
 
     // TODO:
@@ -255,7 +270,80 @@ void mapMaze() {
     if(currentCell == 0 && reachedGoal)
     //if(currentCell == GOAL) // for now end algorithm when the center is reached
       keepMapping = false;
-  }
+
+  } // end of while() loop
+}
+
+void mapMaze() {
+
+  bool keepMapping = true, reachedGoal = false;
+  Node* currentNode;
+
+  int counter = 0;
+
+  // for each cells visited
+  while(keepMapping) {
+
+    std::priority_queue<byte, std::vector<byte>, CompareNodes> queue; // available cells list 
+    currentNode = &maze[currentCell]; // get currentNode
+  
+    std::cout << counter << "th current cell: " << (int) currentCell << std::endl;
+
+    // if the current node is not visited
+    if(!currentNode->isMapped()) {
+
+      currentNode->map(); // mark the cell that it has been mapped 
+      counter++; // when visiting new cell, increment counter
+
+      // check sensors using checkForWalls function
+      // set walls
+      checkForWalls();
+    }
+
+    // update neighboring nodes by changing the g values,
+    // keep track of the smallest g value 
+    // and choose the best option
+    for(byte side=0; side<4; ++side) {
+
+      if(currentNode->getWall(side)) continue; // if theres wall, do nothing
+
+      nextCell = currentCell + neighbors[side]; // get next cell index
+
+      if(!maze[nextCell].isMapped()) { // if the new cell is not visited
+        // if changing the g value each time doesn't work,
+        // try comparing the g value, and if lower g value can be stored, store the lower.
+        maze[nextCell].setG(0);
+        if(!maze[nextCell].getParent()) // if there is no parent
+          maze[nextCell].setParent(currentCell); // set parent of nextCell to currentCell
+        // only add cells that are haven't been visited
+        queue.push(nextCell);
+      }
+    } // end of for() loop
+
+    // if there are three walls and or no new cells to visit, move to parent
+    // this is when the queue is empty
+    nextCell = queue.empty() ? currentNode->getParent() : queue.top();
+
+    // TODO:
+    // check for corner cases
+    // such as when the mouse has reached the goal
+    // needs to go back to the start cell
+    if(currentCell == GOAL) {
+      reachedGoal = true;
+      //setHValues(0);
+    }
+
+    // TODO:
+    // move to next node
+    // change orientation, move the mouse
+    currentCell = nextCell;
+
+    // when the mouse comes back to the start cell
+    if(currentCell == 0 && reachedGoal)
+    //if(currentCell == GOAL) // for now end algorithm when the center is reached
+      keepMapping = false;
+
+  } // end of while() loop
 }
 
 void resetGValues() {

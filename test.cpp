@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
   /************************ DEBUG *****************************/
   /*************** Setting Up the Walls ***********************/
 
-  //mazeOne();
+  //jmazeOne();
   randMaze(); 
   setFakeMaze(realMaze);
 
@@ -50,11 +50,26 @@ int main(int argc, char * argv[]) {
   std::vector<Node> newMaze(256);  
   setMaze(newMaze); // set up Maze
 
-  setHValues(GOAL); // set H values on maze
   
+  setHValues(GOAL); // set H values on maze
   mapMaze(); // mapping maze
 
+  // printing mappedPath and shortestPath
+  std::stack<byte> mappedPath;
+  std::stack<byte> shortestPath;
+  byte final = ROWS*(ROWS/2)+COLS/2;
+  Node currentNode = maze[final];
+  byte parent = currentNode.getParent();
 
+  // get shortest path by following parent node
+  mappedPath.push(final);
+  while(parent != 0) {
+     mappedPath.push(parent); 
+     currentNode = maze[parent];
+     parent = currentNode.getParent();
+  }
+  mappedPath.push(parent);
+  
   /************************ DEBUG *****************************/
   /************** Printing out H values ***********************/
   // for(int i=0; i<ROWS*COLS; ++i) 
@@ -83,13 +98,12 @@ int main(int argc, char * argv[]) {
 
   std::cout << "elapsed time for a* algorithm: " << (float)time/CLOCKS_PER_SEC << std::endl;
 
-  std::stack<byte> shortestPath;
-  byte final = ROWS*(ROWS/2)+COLS/2;
-  Node currentNode = maze[final];
-  byte parent = currentNode.getParent();
 
   std::cout << "the final node: " << ROWS*(ROWS/2)+COLS/2 << std::endl;
   std::cout << "parent of the final node: " << (int) parent << std::endl;
+
+  currentNode = maze[final];
+  parent = currentNode.getParent();
 
   // get shortest path by following parent node
   shortestPath.push(final);
@@ -111,6 +125,14 @@ int main(int argc, char * argv[]) {
 
   std::cout << std::endl;
   std::cout << ">>>>>>>>>>>>>>>>>>>>>> Our Maze: <<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+
+  // print the mapped path
+  std::cout << "The mapped path is: ";
+  while(!mappedPath.empty()) {
+    std::cout << (int) mappedPath.top() << " ";
+    mappedPath.pop();
+  }
+  std::cout << std::endl;
 
   // print the shortest path
   std::cout << "The shortest path is: ";

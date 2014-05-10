@@ -35,32 +35,4 @@ class CompareNodes {
   bool operator() (const byte  & lhs, const byte & rhs) const; 
 };
 
-// template class for priority_queue with find 
-// used in findShortestPath()
-template<class T,
-         class Container=std::vector<T>, 
-         class Compare=std::less<typename Container::value_type>>
-class priority_queue : public std::priority_queue<T, Container, Compare> {
-  public:
-    typedef typename
-      std::priority_queue<T, Container, 
-                          Compare>::container_type::iterator iterator;
-
-    iterator find(const T& val) {
-      // return std::find(this->c.begin(), this->c.end());
-      auto first = this->c.begin();
-      auto last = this->c.end();
-      while(first != last) {
-        if(*first == val) return first; 
-        ++first;
-      }
-      return last;
-    }
-
-    iterator end() {
-      // return iterator passed the last element
-      return this->c.end();
-    }
-};
-
 #endif //MAZE_HPP
